@@ -1,3 +1,5 @@
-main.svelte-2x1evt{text-align:center;padding:1em;max-width:240px;margin:0 auto}h1.svelte-2x1evt{color:#ff3e00;text-transform:uppercase;font-size:4em;font-weight:100}@media(min-width: 640px){main.svelte-2x1evt{max-width:none}}
+#layout.svelte-1ywhwbn{display:grid;grid-template-columns:auto 300px;grid-template-rows:50vh auto;height:100vh}#code-view.svelte-1ywhwbn{grid-column-start:1;grid-column-end:2;grid-row-start:1;grid-row-end:3;background-color:red}#environment-view.svelte-1ywhwbn{background-color:blueviolet}#some-view.svelte-1ywhwbn{background-color:greenyellow}body{padding:0
+	}
+textarea.svelte-1t2bl5g{resize:none;width:100%;height:100%;padding:0;border:0}#code-container.svelte-1t2bl5g{display:flex;flex-direction:row;height:100%}#line-numbers.svelte-1t2bl5g{width:40px;height:100%}#text-container.svelte-1t2bl5g{flex-grow:1;height:100%}
 
 /*# sourceMappingURL=bundle.css.map */

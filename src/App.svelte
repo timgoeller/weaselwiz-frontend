@@ -1,28 +1,43 @@
 <script>
+	import Codeview from './components/Codeview.svelte'
+
 	export let name;
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+<main id="layout">
+	<div id="code-view">
+		<Codeview></Codeview>
+	</div>
+	<div id="environment-view"></div>
+	<div id="some-view"></div>
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
+	#layout {
+		display: grid;
+		grid-template-columns: auto 300px;
+		grid-template-rows: 50vh auto;
+		height:100vh;
 	}
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
+
+	#code-view {
+		grid-column-start: 1;
+		grid-column-end: 2;
+
+		grid-row-start: 1;
+		grid-row-end: 3;
+		background-color: red;
 	}
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
+
+	#environment-view {
+		background-color: blueviolet;
+	}
+
+	#some-view {
+		background-color: greenyellow;
+	}
+
+	:global(body) {
+		padding: 0
 	}
 </style>
