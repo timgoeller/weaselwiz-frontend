@@ -1,12 +1,25 @@
 <script>
 	import Codeview from './components/Codeview.svelte'
+	import Taskbar from './components/Taskbar.svelte'
 
-	export let name;
+	let codeview;
+
+	function runTypechecker() {
+		// console.log(codeview.code)
+		codeview.disableCodeView()
+		fetch('http://localhost:37105/compile' , {
+			method: 'POST',
+			body: codeview.code
+		}).then(response => response.json()).then(data => console.log(data))
+	}
 </script>
 
 <main id="layout">
 	<div id="code-view">
-		<Codeview></Codeview>
+		<Codeview bind:this={codeview}>></Codeview>
+	</div>
+	<div id="taskbar">
+		<Taskbar on:runTypecheckClicked={runTypechecker}></Taskbar>
 	</div>
 	<div id="environment-view"></div>
 	<div id="some-view"></div>
@@ -16,7 +29,7 @@
 	#layout {
 		display: grid;
 		grid-template-columns: auto 300px;
-		grid-template-rows: 50vh auto;
+		grid-template-rows: 50vh auto 40px;
 		height:100vh;
 	}
 
@@ -29,15 +42,22 @@
 		background-color: red;
 	}
 
+	#taskbar {
+		grid-column-start: 1;
+		grid-column-end: 2;
+
+		grid-row-start: 3;
+		grid-row-end: 4;
+	}
+
 	#environment-view {
 		background-color: blueviolet;
 	}
 
 	#some-view {
 		background-color: greenyellow;
-	}
 
-	:global(body) {
-		padding: 0
+		grid-row-start: 2;
+		grid-row-end: 4;
 	}
 </style>

@@ -1,22 +1,27 @@
 <script>
-  export let foo;
+	export let foo;
+	export let code;
   
 	// Values that are passed in as props
 	// are immediately available
 	console.log({ foo });
 
-	function handleCodeInput(input) {
-		console.log(input.srcElement.value)
+	let inputDisabled = false;
+
+	export function disableCodeView() {
+		inputDisabled = true;
 	}
 
 </script>
+
+<svelte:options accessors={true}/>
 
 <div id="code-container">
 	<div id="line-numbers">
 
 	</div>
 	<div id="text-container">
-		<textarea on:input={handleCodeInput} id='code-area'></textarea>
+		<textarea disabled={inputDisabled} bind:value={code} id='code-area'></textarea>
 	</div>
 	
 </div>
