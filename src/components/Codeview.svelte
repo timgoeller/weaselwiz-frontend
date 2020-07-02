@@ -22,7 +22,11 @@
 		console.log(code)
 		let highlightedText
 		if (currentStep) {
-			highlightedText = applyHighlights(code)
+			highlightedText = applyHighlights(code, 
+			currentStep.expr.span.start.column, 
+			currentStep.expr.span.start.line, 
+			currentStep.expr.span.end.column,
+			currentStep.expr.span.end.line)
 		}
 		else {
 			highlightedText = code
@@ -34,17 +38,14 @@
 		updateHighlight(code.srcElement.value)
 	}
 
-	function applyHighlights(text) {
+	function applyHighlights(text, startSpanColumn, startSpanLine, endSpanColumn, endSpanLine) {
 		let split = text.split("\n"); 
-		let startSpan = currentStep.expr.span.start
-		let endSpan = currentStep.expr.span.end
-		split[startSpan.line] = split[startSpan.line].slice(0, startSpan.column) + '<mark>' + split[startSpan.line].slice(startSpan.column, split[startSpan.line].length)
-		if (startSpan.line === endSpan.line && endSpan.column > startSpan.column ) {
-			endSpan.column += 7
+		split[startSpanLine] = split[startSpanLine].slice(0, startSpanColumn) + '<mark>' + split[startSpanLine].slice(startSpanColumn, split[startSpanLine].length)
+		endSpanColumn += 1
+		if (startSpanLine === endSpanLine && endSpanColumn > startSpanColumn ) {
+			endSpanColumn += 6
 		}
-		console.log(split[endSpan.line])
-		split[endSpan.line] = split[endSpan.line].slice(0, endSpan.column) + '</mark>' + split[endSpan.line].slice(endSpan.column, split[endSpan.line].length)
-		console.log(split[endSpan.line])
+		split[endSpanLine] = split[endSpanLine].slice(0, endSpanColumn) + '</mark>' + split[endSpanLine].slice(endSpanColumn, split[endSpanLine].length)
 		let highlightedString = ''
 	
 		split.forEach(string => {
@@ -116,5 +117,11 @@
     white-space: pre-wrap;
     word-wrap: break-word;
     color: transparent;
+	}
+
+	:global(mark) {
+		color: transparent;
+		background-color: #c6e686;
+		border-radius: 3px;
 	}
 </style>
