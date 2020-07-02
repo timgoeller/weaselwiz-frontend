@@ -90,3 +90,5 @@ out/
 
 .yarnrc
 .yarn/*
+
+public/build
