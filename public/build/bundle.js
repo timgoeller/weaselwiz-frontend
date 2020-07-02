@@ -367,48 +367,68 @@ var app = (function () {
     const file = "src\\components\\Codeview.svelte";
 
     function create_fragment(ctx) {
-    	let div2;
+    	let div4;
     	let div0;
-    	let t;
-    	let div1;
+    	let t0;
+    	let div3;
     	let textarea;
+    	let t1;
+    	let div2;
+    	let div1;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			div2 = element("div");
+    			div4 = element("div");
     			div0 = element("div");
-    			t = space();
-    			div1 = element("div");
+    			t0 = space();
+    			div3 = element("div");
     			textarea = element("textarea");
+    			t1 = space();
+    			div2 = element("div");
+    			div1 = element("div");
     			attr_dev(div0, "id", "line-numbers");
-    			attr_dev(div0, "class", "svelte-1t2bl5g");
-    			add_location(div0, file, 19, 1, 327);
+    			attr_dev(div0, "class", "svelte-1e02he7");
+    			add_location(div0, file, 60, 1, 1496);
     			textarea.disabled = /*inputDisabled*/ ctx[1];
     			attr_dev(textarea, "id", "code-area");
-    			attr_dev(textarea, "class", "svelte-1t2bl5g");
-    			add_location(textarea, file, 23, 2, 393);
-    			attr_dev(div1, "id", "text-container");
-    			attr_dev(div1, "class", "svelte-1t2bl5g");
-    			add_location(div1, file, 22, 1, 364);
-    			attr_dev(div2, "id", "code-container");
-    			attr_dev(div2, "class", "svelte-1t2bl5g");
-    			add_location(div2, file, 18, 0, 299);
+    			attr_dev(textarea, "class", "svelte-1e02he7");
+    			add_location(textarea, file, 64, 2, 1562);
+    			attr_dev(div1, "id", "highlights");
+    			attr_dev(div1, "class", "svelte-1e02he7");
+    			add_location(div1, file, 66, 3, 1690);
+    			attr_dev(div2, "id", "backdrop");
+    			attr_dev(div2, "class", "svelte-1e02he7");
+    			add_location(div2, file, 65, 2, 1666);
+    			attr_dev(div3, "id", "text-container");
+    			attr_dev(div3, "class", "svelte-1e02he7");
+    			add_location(div3, file, 63, 1, 1533);
+    			attr_dev(div4, "id", "code-container");
+    			attr_dev(div4, "class", "svelte-1e02he7");
+    			add_location(div4, file, 59, 0, 1468);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div2, anchor);
-    			append_dev(div2, div0);
-    			append_dev(div2, t);
-    			append_dev(div2, div1);
-    			append_dev(div1, textarea);
+    			insert_dev(target, div4, anchor);
+    			append_dev(div4, div0);
+    			append_dev(div4, t0);
+    			append_dev(div4, div3);
+    			append_dev(div3, textarea);
     			set_input_value(textarea, /*code*/ ctx[0]);
+    			append_dev(div3, t1);
+    			append_dev(div3, div2);
+    			append_dev(div2, div1);
+    			/*div1_binding*/ ctx[8](div1);
 
     			if (!mounted) {
-    				dispose = listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[4]);
+    				dispose = [
+    					listen_dev(textarea, "input", /*codeInput*/ ctx[3], false, false, false),
+    					listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[7])
+    				];
+
     				mounted = true;
     			}
     		},
@@ -424,9 +444,10 @@ var app = (function () {
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div2);
+    			if (detaching) detach_dev(div4);
+    			/*div1_binding*/ ctx[8](null);
     			mounted = false;
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -443,16 +464,58 @@ var app = (function () {
 
     function instance($$self, $$props, $$invalidate) {
     	let { foo } = $$props;
-    	let { code } = $$props;
-
-    	// Values that are passed in as props
-    	// are immediately available
-    	console.log({ foo });
-
+    	let { code = "let x = 14 in 12 + x" } = $$props;
     	let inputDisabled = false;
+    	let highlights;
 
     	function disableCodeView() {
     		$$invalidate(1, inputDisabled = true);
+    	}
+
+    	let currentStep;
+
+    	function showStep(step) {
+    		currentStep = step;
+    		updateHighlight(code);
+    	}
+
+    	function updateHighlight(code) {
+    		console.log(code);
+    		let highlightedText;
+
+    		if (currentStep) {
+    			highlightedText = applyHighlights(code);
+    		} else {
+    			highlightedText = code;
+    		}
+
+    		$$invalidate(2, highlights.innerHTML = highlightedText, highlights);
+    	}
+
+    	function codeInput(code) {
+    		updateHighlight(code.srcElement.value);
+    	}
+
+    	function applyHighlights(text) {
+    		let split = text.split("\n");
+    		let startSpan = currentStep.expr.span.start;
+    		let endSpan = currentStep.expr.span.end;
+    		split[startSpan.line] = split[startSpan.line].slice(0, startSpan.column) + "<mark>" + split[startSpan.line].slice(startSpan.column, split[startSpan.line].length);
+
+    		if (startSpan.line === endSpan.line && endSpan.column > startSpan.column) {
+    			endSpan.column += 7;
+    		}
+
+    		console.log(split[endSpan.line]);
+    		split[endSpan.line] = split[endSpan.line].slice(0, endSpan.column) + "</mark>" + split[endSpan.line].slice(endSpan.column, split[endSpan.line].length);
+    		console.log(split[endSpan.line]);
+    		let highlightedString = "";
+
+    		split.forEach(string => {
+    			highlightedString += string + "\n";
+    		});
+
+    		return highlightedString;
     	}
 
     	const writable_props = ["foo", "code"];
@@ -469,8 +532,15 @@ var app = (function () {
     		$$invalidate(0, code);
     	}
 
+    	function div1_binding($$value) {
+    		binding_callbacks[$$value ? "unshift" : "push"](() => {
+    			highlights = $$value;
+    			$$invalidate(2, highlights);
+    		});
+    	}
+
     	$$self.$set = $$props => {
-    		if ("foo" in $$props) $$invalidate(2, foo = $$props.foo);
+    		if ("foo" in $$props) $$invalidate(4, foo = $$props.foo);
     		if ("code" in $$props) $$invalidate(0, code = $$props.code);
     	};
 
@@ -478,26 +548,50 @@ var app = (function () {
     		foo,
     		code,
     		inputDisabled,
-    		disableCodeView
+    		highlights,
+    		disableCodeView,
+    		currentStep,
+    		showStep,
+    		updateHighlight,
+    		codeInput,
+    		applyHighlights
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("foo" in $$props) $$invalidate(2, foo = $$props.foo);
+    		if ("foo" in $$props) $$invalidate(4, foo = $$props.foo);
     		if ("code" in $$props) $$invalidate(0, code = $$props.code);
     		if ("inputDisabled" in $$props) $$invalidate(1, inputDisabled = $$props.inputDisabled);
+    		if ("highlights" in $$props) $$invalidate(2, highlights = $$props.highlights);
+    		if ("currentStep" in $$props) currentStep = $$props.currentStep;
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [code, inputDisabled, foo, disableCodeView, textarea_input_handler];
+    	return [
+    		code,
+    		inputDisabled,
+    		highlights,
+    		codeInput,
+    		foo,
+    		disableCodeView,
+    		showStep,
+    		textarea_input_handler,
+    		div1_binding
+    	];
     }
 
     class Codeview extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance, create_fragment, safe_not_equal, { foo: 2, code: 0, disableCodeView: 3 });
+
+    		init(this, options, instance, create_fragment, safe_not_equal, {
+    			foo: 4,
+    			code: 0,
+    			disableCodeView: 5,
+    			showStep: 6
+    		});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -509,17 +603,13 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*foo*/ ctx[2] === undefined && !("foo" in props)) {
+    		if (/*foo*/ ctx[4] === undefined && !("foo" in props)) {
     			console_1.warn("<Codeview> was created without expected prop 'foo'");
-    		}
-
-    		if (/*code*/ ctx[0] === undefined && !("code" in props)) {
-    			console_1.warn("<Codeview> was created without expected prop 'code'");
     		}
     	}
 
     	get foo() {
-    		return this.$$.ctx[2];
+    		return this.$$.ctx[4];
     	}
 
     	set foo(foo) {
@@ -537,11 +627,19 @@ var app = (function () {
     	}
 
     	get disableCodeView() {
-    		return this.$$.ctx[3];
+    		return this.$$.ctx[5];
     	}
 
     	set disableCodeView(value) {
     		throw new Error("<Codeview>: Cannot set read-only property 'disableCodeView'");
+    	}
+
+    	get showStep() {
+    		return this.$$.ctx[6];
+    	}
+
+    	set showStep(value) {
+    		throw new Error("<Codeview>: Cannot set read-only property 'showStep'");
     	}
     }
 
@@ -550,18 +648,33 @@ var app = (function () {
 
     function create_fragment$1(ctx) {
     	let div;
-    	let button;
+    	let button0;
+    	let t1;
+    	let button1;
+    	let t3;
+    	let button2;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			div = element("div");
-    			button = element("button");
-    			button.textContent = "Run Typecheck";
-    			add_location(button, file$1, 6, 2, 151);
+    			button0 = element("button");
+    			button0.textContent = "Run Typecheck";
+    			t1 = space();
+    			button1 = element("button");
+    			button1.textContent = "Step forward";
+    			t3 = space();
+    			button2 = element("button");
+    			button2.textContent = "Step back";
+    			attr_dev(button0, "class", "svelte-1syor3b");
+    			add_location(button0, file$1, 6, 2, 151);
+    			attr_dev(button1, "class", "svelte-1syor3b");
+    			add_location(button1, file$1, 7, 2, 234);
+    			attr_dev(button2, "class", "svelte-1syor3b");
+    			add_location(button2, file$1, 8, 2, 315);
     			attr_dev(div, "id", "taskbar-container");
-    			attr_dev(div, "class", "svelte-1sq528l");
+    			attr_dev(div, "class", "svelte-1syor3b");
     			add_location(div, file$1, 5, 0, 119);
     		},
     		l: function claim(nodes) {
@@ -569,10 +682,19 @@ var app = (function () {
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
-    			append_dev(div, button);
+    			append_dev(div, button0);
+    			append_dev(div, t1);
+    			append_dev(div, button1);
+    			append_dev(div, t3);
+    			append_dev(div, button2);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler*/ ctx[1], false, false, false);
+    				dispose = [
+    					listen_dev(button0, "click", /*click_handler*/ ctx[1], false, false, false),
+    					listen_dev(button1, "click", /*click_handler_1*/ ctx[2], false, false, false),
+    					listen_dev(button2, "click", /*click_handler_2*/ ctx[3], false, false, false)
+    				];
+
     				mounted = true;
     			}
     		},
@@ -582,7 +704,7 @@ var app = (function () {
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
     			mounted = false;
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -608,8 +730,10 @@ var app = (function () {
     	let { $$slots = {}, $$scope } = $$props;
     	validate_slots("Taskbar", $$slots, []);
     	const click_handler = () => dispatch("runTypecheckClicked");
+    	const click_handler_1 = () => dispatch("stepForwardClicked");
+    	const click_handler_2 = () => dispatch("stepBackwardClicked");
     	$$self.$capture_state = () => ({ createEventDispatcher, dispatch });
-    	return [dispatch, click_handler];
+    	return [dispatch, click_handler, click_handler_1, click_handler_2];
     }
 
     class Taskbar extends SvelteComponentDev {
@@ -627,12 +751,10 @@ var app = (function () {
     }
 
     /* src\App.svelte generated by Svelte v3.23.2 */
-
-    const { console: console_1$1 } = globals;
     const file$2 = "src\\App.svelte";
 
-    // (19:2) <Codeview bind:this={codeview}>
-    function create_default_slot(ctx) {
+    // (39:2) <Codeview bind:this={codeview}>
+    function create_default_slot_1(ctx) {
     	let t;
 
     	const block = {
@@ -649,9 +771,9 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot.name,
+    		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(19:2) <Codeview bind:this={codeview}>",
+    		source: "(39:2) <Codeview bind:this={codeview}>",
     		ctx
     	});
 
@@ -672,14 +794,16 @@ var app = (function () {
     	let current;
 
     	let codeview_1_props = {
-    		$$slots: { default: [create_default_slot] },
+    		$$slots: { default: [create_default_slot_1] },
     		$$scope: { ctx }
     	};
 
     	codeview_1 = new Codeview({ props: codeview_1_props, $$inline: true });
-    	/*codeview_1_binding*/ ctx[2](codeview_1);
+    	/*codeview_1_binding*/ ctx[4](codeview_1);
     	taskbar = new Taskbar({ $$inline: true });
     	taskbar.$on("runTypecheckClicked", /*runTypechecker*/ ctx[1]);
+    	taskbar.$on("stepForwardClicked", /*stepForward*/ ctx[3]);
+    	taskbar.$on("stepBackwardClicked", /*stepBackward*/ ctx[2]);
 
     	const block = {
     		c: function create() {
@@ -694,20 +818,20 @@ var app = (function () {
     			t2 = space();
     			div3 = element("div");
     			attr_dev(div0, "id", "code-view");
-    			attr_dev(div0, "class", "svelte-1t902fu");
-    			add_location(div0, file$2, 17, 1, 429);
+    			attr_dev(div0, "class", "svelte-1b3uhsy");
+    			add_location(div0, file$2, 37, 1, 908);
     			attr_dev(div1, "id", "taskbar");
-    			attr_dev(div1, "class", "svelte-1t902fu");
-    			add_location(div1, file$2, 20, 1, 508);
+    			attr_dev(div1, "class", "svelte-1b3uhsy");
+    			add_location(div1, file$2, 40, 1, 987);
     			attr_dev(div2, "id", "environment-view");
-    			attr_dev(div2, "class", "svelte-1t902fu");
-    			add_location(div2, file$2, 23, 1, 601);
+    			attr_dev(div2, "class", "svelte-1b3uhsy");
+    			add_location(div2, file$2, 47, 1, 1172);
     			attr_dev(div3, "id", "some-view");
-    			attr_dev(div3, "class", "svelte-1t902fu");
-    			add_location(div3, file$2, 24, 1, 637);
+    			attr_dev(div3, "class", "svelte-1b3uhsy");
+    			add_location(div3, file$2, 48, 1, 1208);
     			attr_dev(main, "id", "layout");
-    			attr_dev(main, "class", "svelte-1t902fu");
-    			add_location(main, file$2, 16, 0, 408);
+    			attr_dev(main, "class", "svelte-1b3uhsy");
+    			add_location(main, file$2, 36, 0, 887);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -728,11 +852,18 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const codeview_1_changes = {};
 
-    			if (dirty & /*$$scope*/ 8) {
+    			if (dirty & /*$$scope*/ 128) {
     				codeview_1_changes.$$scope = { dirty, ctx };
     			}
 
     			codeview_1.$set(codeview_1_changes);
+    			const taskbar_changes = {};
+
+    			if (dirty & /*$$scope*/ 128) {
+    				taskbar_changes.$$scope = { dirty, ctx };
+    			}
+
+    			taskbar.$set(taskbar_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -747,7 +878,7 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
-    			/*codeview_1_binding*/ ctx[2](null);
+    			/*codeview_1_binding*/ ctx[4](null);
     			destroy_component(codeview_1);
     			destroy_component(taskbar);
     		}
@@ -766,18 +897,38 @@ var app = (function () {
 
     function instance$2($$self, $$props, $$invalidate) {
     	let codeview;
+    	let currentTypecheckingData;
+    	let stepTracker = 0;
 
     	function runTypechecker() {
     		// console.log(codeview.code)
     		codeview.disableCodeView();
 
-    		fetch("http://localhost:37105/compile", { method: "POST", body: codeview.code }).then(response => response.json()).then(data => console.log(data));
+    		fetch("http://localhost:37105/compile", { method: "POST", body: codeview.code }).then(response => response.json()).then(data => {
+    			currentTypecheckingData = data;
+    			stepTracker = 0;
+    			codeview.showStep(currentTypecheckingData[stepTracker]);
+    		});
+    	}
+
+    	function stepBackward() {
+    		if (!stepTracker <= 0) {
+    			stepTracker--;
+    			codeview.showStep(currentTypecheckingData[stepTracker]);
+    		}
+    	}
+
+    	function stepForward() {
+    		if (!(stepTracker >= currentTypecheckingData.length - 1)) {
+    			stepTracker++;
+    			codeview.showStep(currentTypecheckingData[stepTracker]);
+    		}
     	}
 
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1$1.warn(`<App> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
     	let { $$slots = {}, $$scope } = $$props;
@@ -794,18 +945,24 @@ var app = (function () {
     		Codeview,
     		Taskbar,
     		codeview,
-    		runTypechecker
+    		currentTypecheckingData,
+    		stepTracker,
+    		runTypechecker,
+    		stepBackward,
+    		stepForward
     	});
 
     	$$self.$inject_state = $$props => {
     		if ("codeview" in $$props) $$invalidate(0, codeview = $$props.codeview);
+    		if ("currentTypecheckingData" in $$props) currentTypecheckingData = $$props.currentTypecheckingData;
+    		if ("stepTracker" in $$props) stepTracker = $$props.stepTracker;
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [codeview, runTypechecker, codeview_1_binding];
+    	return [codeview, runTypechecker, stepBackward, stepForward, codeview_1_binding];
     }
 
     class App extends SvelteComponentDev {

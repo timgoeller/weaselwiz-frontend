@@ -2,7 +2,9 @@
 	import Codeview from './components/Codeview.svelte'
 	import Taskbar from './components/Taskbar.svelte'
 
-	let codeview;
+	let codeview
+	let currentTypecheckingData
+	let stepTracker = 0
 
 	function runTypechecker() {
 		// console.log(codeview.code)
@@ -10,7 +12,25 @@
 		fetch('http://localhost:37105/compile' , {
 			method: 'POST',
 			body: codeview.code
-		}).then(response => response.json()).then(data => console.log(data))
+		}).then(response => response.json()).then(data => {
+			currentTypecheckingData = data
+			stepTracker = 0
+			codeview.showStep(currentTypecheckingData[stepTracker])
+		})
+	}
+
+	function stepBackward() {
+		if(!stepTracker <= 0) {
+			stepTracker--
+			codeview.showStep(currentTypecheckingData[stepTracker])
+		}
+	}
+
+	function stepForward() {
+		if(!(stepTracker >= (currentTypecheckingData.length - 1))) {
+			stepTracker++
+			codeview.showStep(currentTypecheckingData[stepTracker])
+		}
 	}
 </script>
 
@@ -19,7 +39,11 @@
 		<Codeview bind:this={codeview}>></Codeview>
 	</div>
 	<div id="taskbar">
-		<Taskbar on:runTypecheckClicked={runTypechecker}></Taskbar>
+		<Taskbar 
+			on:runTypecheckClicked={runTypechecker} 
+			on:stepForwardClicked={stepForward}
+			on:stepBackwardClicked={stepBackward}>
+		</Taskbar>
 	</div>
 	<div id="environment-view"></div>
 	<div id="some-view"></div>
@@ -39,7 +63,9 @@
 
 		grid-row-start: 1;
 		grid-row-end: 3;
-		background-color: red;
+
+		border: 2px solid black;
+		border-radius: 5px;
 	}
 
 	#taskbar {

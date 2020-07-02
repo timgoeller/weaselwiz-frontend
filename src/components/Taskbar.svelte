@@ -5,6 +5,8 @@
 
 <div id='taskbar-container'>
   <button on:click={() => dispatch('runTypecheckClicked')}>Run Typecheck</button>
+  <button on:click={() => dispatch('stepForwardClicked')}>Step forward</button>
+  <button on:click={() => dispatch('stepBackwardClicked')}>Step back</button>
 </div>
 
 <style>
@@ -15,5 +17,9 @@
     box-sizing: border-box;
     align-items: center;
     height:100%;
+  }
+
+  button {
+    margin: 5px;
   }
 </style>
