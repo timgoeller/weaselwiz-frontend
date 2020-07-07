@@ -1,7 +1,8 @@
 <script type="text/typescript">
 	import Codeview from './components/Codeview.svelte'
 	import Taskbar from './components/Taskbar.svelte'
-	import {typecheckDataStore} from './stores.js'
+	import StepInformation from './components/StepInformation.svelte'
+	import { typecheckDataStore, typecheckDataStepStore } from './stores.js'
 
 	let codeview
 
@@ -11,14 +12,17 @@
 			method: 'POST',
 			body: codeview.code
 		}).then(response => response.json()).then(data => {
+			data.sort((a, b) => a.seq < b.seq ? 1 : -1) 
+			console.log(data)
 			typecheckDataStore.set(data)
+			typecheckDataStepStore.set(0)
 		})
 	}
 </script>
 
 <main id="layout">
 	<div id="code-view">
-		<Codeview bind:this={codeview}></Codeview>
+		<Codeview bind:this={codeview}/>
 	</div>
 	<div id="taskbar">
 		<Taskbar
@@ -26,13 +30,16 @@
 		/>
 	</div>
 	<div id="environment-view"></div>
-	<div id="some-view"></div>
+	<div id="step-counter-view">
+		<StepInformation/>
+	</div>
+	<div id="secondary-taskbar"></div>
 </main>
 
 <style>
 	#layout {
 		display: grid;
-		grid-template-columns: auto 300px;
+		grid-template-columns: auto 400px;
 		grid-template-rows: 50vh auto 40px;
 		height:100vh;
 	}
@@ -56,14 +63,20 @@
 		grid-row-end: 4;
 	}
 
+	#secondary-taskbar {
+		grid-column-start: 2;
+		grid-column-end: 3;
+
+		grid-row-start: 3;
+		grid-row-end: 4;
+	}
+
 	#environment-view {
 		background-color: blueviolet;
 	}
 
-	#some-view {
-		background-color: greenyellow;
-
+	#step-counter-view {
 		grid-row-start: 2;
-		grid-row-end: 4;
+		grid-row-end: 3;
 	}
 </style>
