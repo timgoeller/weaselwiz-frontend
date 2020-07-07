@@ -1,41 +1,40 @@
-<script>
-	export let foo
+<script type="text/typescript">
+	import { typecheckDataStore, typecheckDataStepStore } from './../stores'
+	import { get } from 'svelte/store'
 	export let code = 'let x = 14 in 12 + x'
 
-
 	let inputDisabled = false
-
 	let highlights
 
 	export function disableCodeView() {
 		inputDisabled = true
 	}
-
-	let currentStep
+	
+	typecheckDataStepStore.subscribe(step => {
+		let typecheckData = get(typecheckDataStore)
+		if(typecheckData !== null) {
+			showStep(typecheckData[step])
+		}
+	})
 
 	export function showStep(step) {
-		currentStep = step
-		updateHighlight(code)
+		updateHighlight(code, step)
 	}
 
-	function updateHighlight(code) {
+	function updateHighlight(code : String, step) {
 		console.log(code)
 		let highlightedText
-		if (currentStep) {
+		if (step) {
 			highlightedText = applyHighlights(code, 
-			currentStep.expr.span.start.column, 
-			currentStep.expr.span.start.line, 
-			currentStep.expr.span.end.column,
-			currentStep.expr.span.end.line)
+			step.expr.span.start.column, 
+			step.expr.span.start.line, 
+			step.expr.span.end.column,
+			step.expr.span.end.line)
 		}
 		else {
 			highlightedText = code
 		}
 		highlights.innerHTML = highlightedText
-	}
-
-	function codeInput(code) {
-		updateHighlight(code.srcElement.value)
 	}
 
 	function applyHighlights(text, startSpanColumn, startSpanLine, endSpanColumn, endSpanLine) {
@@ -53,7 +52,6 @@
 		});
 		return highlightedString
 	}
-
 </script>
 
 <svelte:options accessors={true}/>
@@ -63,7 +61,7 @@
 
 	</div>
 	<div id="text-container">
-		<textarea on:input={codeInput} disabled={inputDisabled} bind:value={code} id='code-area'></textarea>
+		<textarea disabled={inputDisabled} bind:value={code} id='code-area'></textarea>
 		<div id="backdrop">
 			<div id="highlights" bind:this={highlights}></div>
 		</div>
@@ -109,7 +107,7 @@
 	}
 
 	#highlights, textarea {
-		font: 20px/28px 'Source Code Pro', monospace;
+		font: 20px/28px 'Fira Code', monospace;
 		letter-spacing: 1px;
 	}
 

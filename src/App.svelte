@@ -1,49 +1,29 @@
-<script>
+<script type="text/typescript">
 	import Codeview from './components/Codeview.svelte'
 	import Taskbar from './components/Taskbar.svelte'
+	import {typecheckDataStore} from './stores.js'
 
 	let codeview
-	let currentTypecheckingData
-	let stepTracker = 0
 
 	function runTypechecker() {
-		// console.log(codeview.code)
 		codeview.disableCodeView()
 		fetch('http://localhost:37105/compile' , {
 			method: 'POST',
 			body: codeview.code
 		}).then(response => response.json()).then(data => {
-			currentTypecheckingData = data
-			stepTracker = 0
-			codeview.showStep(currentTypecheckingData[stepTracker])
+			typecheckDataStore.set(data)
 		})
-	}
-
-	function stepBackward() {
-		if(!stepTracker <= 0) {
-			stepTracker--
-			codeview.showStep(currentTypecheckingData[stepTracker])
-		}
-	}
-
-	function stepForward() {
-		if(!(stepTracker >= (currentTypecheckingData.length - 1))) {
-			stepTracker++
-			codeview.showStep(currentTypecheckingData[stepTracker])
-		}
 	}
 </script>
 
 <main id="layout">
 	<div id="code-view">
-		<Codeview bind:this={codeview}>></Codeview>
+		<Codeview bind:this={codeview}></Codeview>
 	</div>
 	<div id="taskbar">
-		<Taskbar 
+		<Taskbar
 			on:runTypecheckClicked={runTypechecker} 
-			on:stepForwardClicked={stepForward}
-			on:stepBackwardClicked={stepBackward}>
-		</Taskbar>
+		/>
 	</div>
 	<div id="environment-view"></div>
 	<div id="some-view"></div>

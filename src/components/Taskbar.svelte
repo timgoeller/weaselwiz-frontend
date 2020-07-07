@@ -1,12 +1,49 @@
-<script>
+<script type="text/typescript">
+  import { typecheckDataStore, typecheckDataStepStore } from './../stores'
+  import { get } from 'svelte/store'
   import { createEventDispatcher } from 'svelte';
+
+  let steppingDisabled = true
+
   const dispatch = createEventDispatcher();
+
+  let typecheckData = null
+
+  typecheckDataStore.subscribe(data => {
+    typecheckData = data
+    if(data === null) {
+      steppingDisabled = true
+    }
+    else {
+      steppingDisabled = false
+    }
+  })
+
+  function stepBackward() {
+    typecheckDataStepStore.update(step => {
+      if (!(step <= 0)) {
+        return step - 1
+      }
+      return step
+    })
+  }	
+  
+  function stepForward() {
+    typecheckDataStepStore.update(step => {
+      if (step < get(typecheckDataStore).length - 1) {
+          return step + 1
+      }
+      return step
+    })
+  }	
 </script>
+
+<svelte:options accessors={true}/>
 
 <div id='taskbar-container'>
   <button on:click={() => dispatch('runTypecheckClicked')}>Run Typecheck</button>
-  <button on:click={() => dispatch('stepForwardClicked')}>Step forward</button>
-  <button on:click={() => dispatch('stepBackwardClicked')}>Step back</button>
+  <button disabled={steppingDisabled} on:click={stepForward}>Step forward</button>
+  <button disabled={steppingDisabled} on:click={stepBackward}>Step back</button>
 </div>
 
 <style>
