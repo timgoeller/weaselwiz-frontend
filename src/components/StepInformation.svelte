@@ -1,5 +1,5 @@
 <script type="text/typescript">
-  import { typecheckDataStepStore, typecheckDataStore } from './../stores'
+  import { typecheckDataStepStore, typecheckDataStore, errorStore } from './../stores'
   import { get } from 'svelte/store'
 
   let currentStep = 0
@@ -7,6 +7,7 @@
   let currentType = '🤷'
 
   let showNumbers = false
+  let error
 
   typecheckDataStepStore.subscribe(typecheckDataStep => {
     currentStep = typecheckDataStep
@@ -20,6 +21,10 @@
       showNumbers = false
     }
 
+  })
+
+  errorStore.subscribe(newError => {
+    error = newError
   })
 
   function prettyPrintType(type) {
@@ -42,14 +47,18 @@
   <div id="type-container">
     <span id="type">{currentType}</span>
   </div>
+{:else if error !== null}
+  <div id='center-container'>
+    <span id="error">{error}</span>
+  </div>
 {:else}
-  <div id='shrug-container'>
+  <div id='center-container'>
     <span id="shrug">🤷</span>
   </div>
 {/if}
 
 <style>
-  #shrug-container {
+  #center-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,6 +83,10 @@
 
   span#type {
     margin-top: 15px;
+  }
+
+  span#error {
+    color: red;
   }
 
   span#shrug, span#step {

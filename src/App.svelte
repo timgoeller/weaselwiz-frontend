@@ -2,7 +2,7 @@
 	import Codeview from './components/Codeview.svelte'
 	import Taskbar from './components/Taskbar.svelte'
 	import StepInformation from './components/StepInformation.svelte'
-	import { typecheckDataStore, typecheckDataStepStore } from './stores.js'
+	import { typecheckDataStore, typecheckDataStepStore, errorStore } from './stores.js'
 
 	let codeview
 
@@ -12,10 +12,16 @@
 			method: 'POST',
 			body: codeview.code
 		}).then(response => response.json()).then(data => {
-			data.sort((a, b) => a.seq < b.seq ? 1 : -1) 
 			console.log(data)
-			typecheckDataStore.set(data)
-			typecheckDataStepStore.set(0)
+			if(data.error !== undefined) {
+				errorStore.set(data.error)
+			}
+			else {
+				errorStore.set(null)
+				data.sort((a, b) => a.seq < b.seq ? 1 : -1) 
+				typecheckDataStore.set(data)
+				typecheckDataStepStore.set(0)
+			}
 		})
 	}
 </script>
