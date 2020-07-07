@@ -2,6 +2,7 @@
 	import Codeview from './components/Codeview.svelte'
 	import Taskbar from './components/Taskbar.svelte'
 	import StepInformation from './components/StepInformation.svelte'
+	import Contextview from './components/Contextview.svelte'
 	import { typecheckDataStore, typecheckDataStepStore, errorStore } from './stores.js'
 
 	let codeview
@@ -35,7 +36,9 @@
 			on:runTypecheckClicked={runTypechecker} 
 		/>
 	</div>
-	<div id="environment-view"></div>
+	<div id="environment-view">
+		<Contextview/>
+	</div>
 	<div id="step-counter-view">
 		<StepInformation/>
 	</div>
@@ -78,7 +81,7 @@
 	}
 
 	#environment-view {
-		background-color: blueviolet;
+		overflow-y: scroll;
 	}
 
 	#step-counter-view {

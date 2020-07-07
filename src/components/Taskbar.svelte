@@ -38,8 +38,6 @@
   }	
 </script>
 
-<svelte:options accessors={true}/>
-
 <div id='taskbar-container'>
   <button on:click={() => dispatch('runTypecheckClicked')}>Run Typecheck</button>
   <button disabled={steppingDisabled} on:click={stepForward}>Step forward</button>
