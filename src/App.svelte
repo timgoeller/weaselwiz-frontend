@@ -1,4 +1,6 @@
 <script type="text/typescript">
+
+	import SteppingTaskbar from './components/SteppingTaskbar.svelte';
 	import Codeview from './components/Codeview.svelte'
 	import Taskbar from './components/Taskbar.svelte'
 	import StepInformation from './components/StepInformation.svelte'
@@ -42,7 +44,9 @@
 	<div id="step-counter-view">
 		<StepInformation/>
 	</div>
-	<div id="secondary-taskbar"></div>
+	<div id="secondary-taskbar">
+		<SteppingTaskbar/>
+	</div>
 </main>
 
 <style>

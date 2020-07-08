@@ -6,16 +6,18 @@
 	let inputDisabled = false
 	let highlights
 	let lineNumbers
+	let typecheckData
 
 	export function disableCodeView() {
 		inputDisabled = true
 	}
 	
 	typecheckDataStepStore.subscribe(step => {
-		let typecheckData = get(typecheckDataStore)
-		if(typecheckData !== null) {
+		typecheckData = get(typecheckDataStore)
+		if(typecheckData !== null)
 			showStep(typecheckData[step])
-		}
+		else
+			showStep(null)
 	})
 
 	export function showStep(step) {
@@ -23,9 +25,8 @@
 	}
 
 	function updateHighlight(code : String, step) {
-		console.log(code)
 		let highlightedText
-		if (step) {
+		if (step !== null) {
 			highlightedText = applyHighlights(code, 
 			step.expr.span.start.column, 
 			step.expr.span.start.line, 
@@ -35,7 +36,8 @@
 		else {
 			highlightedText = code
 		}
-		highlights.innerHTML = highlightedText
+		if(highlights !== undefined)
+			highlights.innerHTML = highlightedText
 	}
 
 	function applyHighlights(text, startSpanColumn, startSpanLine, endSpanColumn, endSpanLine) {
@@ -69,7 +71,7 @@
 		{/each}
 	</div>
 	<div id="text-container">
-		<textarea disabled={inputDisabled} bind:value={code} id='code-area' on:scroll={onTaskbarScroll}></textarea>
+		<textarea disabled={!(typecheckData === null)} bind:value={code} id='code-area' on:scroll={onTaskbarScroll}></textarea>
 		<div id="backdrop">
 			<div id="highlights" bind:this={highlights}></div>
 		</div>

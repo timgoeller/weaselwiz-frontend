@@ -5,12 +5,6 @@ import { get } from 'svelte/store'
 let context
 let defaultContexEntries = ['head', 'add', 'isEmpty', 'multiply', 'tail', 'subtract', 'equals', 'nil', 'cons']
 
-typecheckDataStore.subscribe(typecheckData => {
-  if(typecheckData !== null) {
-
-  }
-})
-
 typecheckDataStepStore.subscribe(typecheckDataStep => {
   let typecheckData = get(typecheckDataStore)
 
