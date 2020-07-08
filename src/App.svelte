@@ -62,6 +62,8 @@
 
 		border: 2px solid black;
 		border-radius: 5px;
+
+		overflow: hidden;
 	}
 
 	#taskbar {

@@ -5,6 +5,7 @@
 
 	let inputDisabled = false
 	let highlights
+	let lineNumbers
 
 	export function disableCodeView() {
 		inputDisabled = true
@@ -52,16 +53,23 @@
 		});
 		return highlightedString
 	}
+
+	function onTaskbarScroll(event) {
+		lineNumbers.scrollTop = event.srcElement.scrollTop
+		highlights.scrollTop = event.srcElement.scrollTop
+	}
 </script>
 
 <svelte:options accessors={true}/>
 
 <div id="code-container">
-	<div id="line-numbers">
-
+	<div id="line-numbers" bind:this={lineNumbers}>
+		{#each Array.from({length: 1000}, (x, i) => i) as number}
+			<span>{number}</span>
+		{/each}
 	</div>
 	<div id="text-container">
-		<textarea disabled={inputDisabled} bind:value={code} id='code-area'></textarea>
+		<textarea disabled={inputDisabled} bind:value={code} id='code-area' on:scroll={onTaskbarScroll}></textarea>
 		<div id="backdrop">
 			<div id="highlights" bind:this={highlights}></div>
 		</div>
@@ -79,6 +87,7 @@
 		position: absolute;
 		z-index: 2;
 		background-color: transparent;
+		margin-left: 10px;
 	}
 
 	#code-container {
@@ -90,6 +99,16 @@
 	#line-numbers {
 		width: 40px;
 		height: 100%;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		overflow: hidden;
+		border-right: solid 2px black;
+	}
+
+	#line-numbers span {
+		font: 20px/28px 'Fira Code', monospace;
+		letter-spacing: 1px;	
 	}
 
 	#text-container {
@@ -104,6 +123,7 @@
 		width: 100%;
 		top: 0;
     left: 0;
+		margin-left: 10px;
 	}
 
 	#highlights, textarea {
