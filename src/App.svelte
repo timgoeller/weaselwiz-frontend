@@ -50,11 +50,18 @@
 </main>
 
 <style>
+	:global(:root) {
+		--background-color: #3D3D3D;
+		--primary-color: #8D940F;
+	}
+
 	#layout {
 		display: grid;
 		grid-template-columns: auto 400px;
 		grid-template-rows: 50vh auto 40px;
 		height:100vh;
+		background-color: var(--background-color);
+		color: white;
 	}
 
 	#code-view {
@@ -64,10 +71,12 @@
 		grid-row-start: 1;
 		grid-row-end: 3;
 
-		border: 2px solid black;
+		border: 2px solid var(--primary-color);
 		border-radius: 5px;
 
 		overflow: hidden;
+
+		margin: 5px;
 	}
 
 	#taskbar {
@@ -88,10 +97,42 @@
 
 	#environment-view {
 		overflow-y: scroll;
+
+		border: 2px solid var(--primary-color);
+		border-radius: 5px;
+		margin: 5px;
 	}
 
 	#step-counter-view {
 		grid-row-start: 2;
 		grid-row-end: 3;
+
+		border: 2px solid var(--primary-color);
+		border-radius: 5px;
+		margin: 5px;
 	}
+
+	:global(.button) {
+		width: 140px;
+		height: 30px;
+		background-color: var(--primary-color);
+		margin: 0px 5px 0px 5px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: default;
+		border-radius: 3px;
+		border: 1px solid white;
+		font-weight: bold;
+		user-select: none;
+	}
+
+	:global(.button:not(.disabled):hover) {
+		box-shadow: 0 4px 8px 0 rgba(195, 195, 195, 0.2), 0 6px 20px 0 rgba(221, 220, 220, 0.19);
+	}
+
+	:global(.button.disabled) {
+		background-color: #535709;
+	}
+
 </style>

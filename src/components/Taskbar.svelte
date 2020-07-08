@@ -19,21 +19,16 @@
 </script>
 
 <div id='taskbar-container'>
-  <button on:click={resetTypecheckingData} disabled={typecheckData === null}>Reset</button>
-  <button on:click={() => dispatch('runTypecheckClicked')}>Run Typecheck</button>
+  <div class="button" on:click={resetTypecheckingData} class:disabled={typecheckData === null}>Reset</div>
+  <div class="button" on:click={() => dispatch('runTypecheckClicked')} class:disabled={!(typecheckData === null)}>Run</div>
 </div>
 
 <style>
   #taskbar-container {
     display: flex;
     flex-direction: row-reverse;
-    border: 4px solid white;
     box-sizing: border-box;
     align-items: center;
     height:100%;
-  }
-
-  button {
-    margin: 5px;
   }
 </style>

@@ -35,21 +35,16 @@
 </script>
 
 <div id='taskbar-container'>
-  <button disabled={steppingDisabled} on:click={stepForward}>Step forward</button>
-  <button disabled={steppingDisabled} on:click={stepBackward}>Step back</button>
+  <div class="button" on:click={stepForward} class:disabled={steppingDisabled}>Step forward</div>
+  <div class="button" on:click={stepBackward} class:disabled={steppingDisabled}>Step backward</div>
 </div>
 
 <style>
   #taskbar-container {
     display: flex;
     flex-direction: row-reverse;
-    border: 4px solid white;
     box-sizing: border-box;
     align-items: center;
     height:100%;
-  }
-
-  button {
-    margin: 5px;
   }
 </style>

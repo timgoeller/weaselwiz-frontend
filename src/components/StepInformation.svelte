@@ -73,6 +73,7 @@
   #type-container {
     width: 100%;
     height: 60%;
+    font: 20px/28px 'Fira Code', monospace;
   }
 
   #step-container {

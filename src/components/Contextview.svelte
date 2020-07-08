@@ -33,7 +33,7 @@ function prettyPrintType(type) {
     </div>
     {#each Object.keys(context) as contextEntryKey}
       {#if !defaultContexEntries.includes(contextEntryKey)}
-        <span>{contextEntryKey}: {prettyPrintType(context[contextEntryKey].type)}</span><br/>
+        <span class="context-entry">{contextEntryKey}: {prettyPrintType(context[contextEntryKey].type)}</span><br/>
       {/if}
     {/each}
 
@@ -43,7 +43,7 @@ function prettyPrintType(type) {
     </div>
     {#each Object.keys(context) as contextEntryKey}
       {#if defaultContexEntries.includes(contextEntryKey)}
-        <span id="default-entry">{contextEntryKey}: {prettyPrintType(context[contextEntryKey].type)}</span><br/>
+        <span class="context-entry" id="default-entry">{contextEntryKey}: {prettyPrintType(context[contextEntryKey].type)}</span><br/>
       {/if}
     {/each}
   {/if}
@@ -56,7 +56,7 @@ function prettyPrintType(type) {
 }
 
 #divider-line {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--primary-color);
   width:100%;
 }
 
@@ -71,5 +71,9 @@ function prettyPrintType(type) {
 
 #default-entry {
   color: grey;
+}
+
+.context-entry {
+  font: 20px/28px 'Fira Code', monospace;
 }
 </style>

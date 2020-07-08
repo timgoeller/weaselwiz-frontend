@@ -90,6 +90,7 @@
 		z-index: 2;
 		background-color: transparent;
 		margin-left: 10px;
+		color: white;
 	}
 
 	#code-container {
@@ -105,7 +106,7 @@
 		align-items: center;
 		flex-direction: column;
 		overflow: hidden;
-		border-right: solid 2px black;
+		margin-top: 5px;
 	}
 
 	#line-numbers span {
@@ -117,6 +118,7 @@
 		flex-grow: 1;
 		height: 100%;
 		position: relative;
+		margin-top: 5px;
 	}
 
 	#backdrop {
@@ -141,7 +143,7 @@
 
 	:global(mark) {
 		color: transparent;
-		background-color: #c6e686;
+		background-color: var(--primary-color);
 		border-radius: 3px;
 	}
 </style>
