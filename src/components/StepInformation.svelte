@@ -31,11 +31,10 @@
     switch(type.typeName) {
       case "Number" : return "Number"
       case "Boolean" : return "Boolean"
-      case "Function" : return "(Function : " + 
-        prettyPrintType(type.argument) + " -> " + prettyPrintType(type.result) + ")"
+      case "Function" : return prettyPrintType(type.argument) + " -> " + prettyPrintType(type.result)
       case "Var" : return "Var"
       case "Unknown" : return "🤷"
-      case "List" : return "List<" + prettyPrintType(type.ty) + ">"
+      case "List" : return "[" + prettyPrintType(type.ty) + "]"
     }
   }
 </script>
