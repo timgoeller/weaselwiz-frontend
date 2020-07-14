@@ -74,11 +74,13 @@
     width: 100%;
     height: 60%;
     font: 20px/28px 'Fira Code', monospace;
+    color: black;
   }
 
   #step-container {
     width: 100%;
     height: 40%;
+    color: black;
   }
 
   span#type {
@@ -89,7 +91,11 @@
     color: red;
   }
 
-  span#shrug, span#step {
+  span#step {
     font-size: 3em;
+  }
+
+  span#shrug {
+    font-size: 5em;
   }
 </style>

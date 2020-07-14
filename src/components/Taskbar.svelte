@@ -26,6 +26,7 @@
 <style>
   #taskbar-container {
     display: flex;
+    justify-content: center;
     flex-direction: row-reverse;
     box-sizing: border-box;
     align-items: center;

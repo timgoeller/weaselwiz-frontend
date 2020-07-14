@@ -11,6 +11,9 @@ typecheckDataStepStore.subscribe(typecheckDataStep => {
   if(typecheckData !== null) {
     context = typecheckData[get(typecheckDataStepStore)].ctx
   }
+  else {
+    context = null;
+  }
 })
 
 function prettyPrintType(type) {
@@ -29,7 +32,6 @@ function prettyPrintType(type) {
   {#if context !== undefined && context !== null}
     <div id="divider">
       <span>New Entries</span>
-      <div id="divider-line"></div>
     </div>
     {#each Object.keys(context) as contextEntryKey}
       {#if !defaultContexEntries.includes(contextEntryKey)}
@@ -39,7 +41,6 @@ function prettyPrintType(type) {
 
     <div id="divider">
       <span>Default Context</span>
-      <div id="divider-line"></div>
     </div>
     {#each Object.keys(context) as contextEntryKey}
       {#if defaultContexEntries.includes(contextEntryKey)}
@@ -53,16 +54,13 @@ function prettyPrintType(type) {
 <style>
 #context-container {
   margin: 7px;
-}
-
-#divider-line {
-  border-bottom: 1px solid var(--primary-color);
-  width:100%;
+  color: black;
 }
 
 #divider {
   margin-bottom: 5px;
   margin-top: 5px;
+  border-bottom: 1px solid black;
 }
 
 #divider span {

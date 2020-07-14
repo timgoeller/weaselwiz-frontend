@@ -89,8 +89,11 @@
 		position: absolute;
 		z-index: 2;
 		background-color: transparent;
-		margin-left: 10px;
-		color: white;
+		color: black;
+	}
+
+	textarea:focus {
+    outline-width: 0;
 	}
 
 	#code-container {
@@ -106,7 +109,9 @@
 		align-items: center;
 		flex-direction: column;
 		overflow: hidden;
-		margin-top: 5px;
+		padding-top: 5px;
+		background: #7976FF;
+		box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.25);
 	}
 
 	#line-numbers span {
@@ -119,6 +124,7 @@
 		height: 100%;
 		position: relative;
 		margin-top: 5px;
+		margin-left: 10px;
 	}
 
 	#backdrop {
@@ -127,7 +133,6 @@
 		width: 100%;
 		top: 0;
     left: 0;
-		margin-left: 10px;
 	}
 
 	#highlights, textarea {
@@ -143,7 +148,7 @@
 
 	:global(mark) {
 		color: transparent;
-		background-color: var(--primary-color);
+		background: #7976FF;
 		border-radius: 3px;
 	}
 </style>
