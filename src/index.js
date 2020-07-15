@@ -18,6 +18,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     minWidth: 800,
     minHeight: 600,
+    icon: path.join(__dirname, '../public/WeaselWizIcon.png'),
     webPreferences: {
       nodeIntegration: true
     }
