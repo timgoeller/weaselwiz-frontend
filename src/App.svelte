@@ -17,7 +17,7 @@
 		}).then(response => response.json()).then(data => {
 			if(data.error !== undefined) {
 				errorStore.set(data.error)
-				typecheckDataStepStore.set(0)
+				typecheckDataStepStore.set(null)
 				typecheckDataStore.set(null)
 			}
 			else {
@@ -25,6 +25,7 @@
 				let typecheckData = data["typecheckData"]
 				typecheckData.sort((a, b) => a.seq < b.seq ? 1 : -1) 
 				resultStore.set(data['result'])
+				console.log(data['result'])
 				typecheckDataStore.set(typecheckData)
 				typecheckDataStepStore.set(0)
 			}

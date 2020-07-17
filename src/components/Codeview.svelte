@@ -74,6 +74,9 @@
 				return prettyPrintResult(accumulator) + (index < result.values.length ? "," : "")
 			}) + "]"
 		}
+		else {
+			return '🤷'
+		}
 	}
 </script>
 

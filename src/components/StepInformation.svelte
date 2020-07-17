@@ -47,7 +47,10 @@
     <span id="type">{currentType}</span>
   </div>
 {:else if error !== null}
-  <div id='center-container'>
+  <div id="error-emoji-container">
+    <span id="error-emoji">🙆‍♀️</span>
+  </div>
+  <div id="error-container">
     <span id="error">{error}</span>
   </div>
 {:else}
@@ -83,12 +86,31 @@
     color: black;
   }
 
+  #error-emoji-container, #error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #error-emoji-container {
+    width: 100%;
+    height: 50%;
+    font-size: 3.5em;
+  }
+
+  #error-container {
+    width: 100%;
+    height: 50%;
+  }
+
   span#type {
     margin-top: 15px;
   }
 
   span#error {
     color: red;
+    font: 1.3em 'Fira Code', monospace;
+    font-weight: bold;
   }
 
   span#step {
