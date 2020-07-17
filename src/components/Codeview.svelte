@@ -16,8 +16,9 @@
 		typecheckData = get(typecheckDataStore)
 		if(typecheckData !== null)
 			showStep(typecheckData[step])
-		else
+		else {
 			showStep(null)
+		}
 	})
 
 	export function showStep(step) {
@@ -73,7 +74,7 @@
 	<div id="text-container">
 		<textarea disabled={!(typecheckData === null)} bind:value={code} id='code-area' on:scroll={onTaskbarScroll}></textarea>
 		<div id="backdrop">
-			<div id="highlights" bind:this={highlights}></div>
+			<div id="highlights" class="{(typecheckData === null) ? 'hidden' : ''}" bind:this={highlights}></div>
 		</div>
 	</div>
 	
@@ -94,6 +95,10 @@
 
 	textarea:focus {
     outline-width: 0;
+	}
+
+	textarea:disabled {
+    opacity: 0;
 	}
 
 	#code-container {
@@ -143,12 +148,16 @@
 	#highlights {
     white-space: pre-wrap;
     word-wrap: break-word;
-    color: transparent;
+    color: black;
+	}
+
+	#highlights.hidden {
+		opacity: 0;
 	}
 
 	:global(mark) {
-		color: transparent;
 		background: #7976FF;
+		color: white;
 		border-radius: 3px;
 	}
 </style>
