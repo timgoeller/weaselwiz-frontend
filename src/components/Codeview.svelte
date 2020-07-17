@@ -1,5 +1,5 @@
 <script type="text/typescript">
-	import { typecheckDataStore, typecheckDataStepStore } from './../stores'
+	import { typecheckDataStore, typecheckDataStepStore, resultStore } from './../stores'
 	import { get } from 'svelte/store'
 	export let code = 'let x = 14 in 12 + x'
 
@@ -43,7 +43,7 @@
 
 	function applyHighlights(text, startSpanColumn, startSpanLine, endSpanColumn, endSpanLine) {
 		let split = text.split("\n"); 
-		split[startSpanLine] = split[startSpanLine].slice(0, startSpanColumn) + '<mark>' + split[startSpanLine].slice(startSpanColumn, split[startSpanLine].length)
+		split[startSpanLine] = split[startSpanLine].slice(0, startSpanColumn) + "<mark>" + split[startSpanLine].slice(startSpanColumn, split[startSpanLine].length)
 		endSpanColumn += 1
 		if (startSpanLine === endSpanLine && endSpanColumn > startSpanColumn ) {
 			endSpanColumn += 6
@@ -54,12 +54,26 @@
 		split.forEach(string => {
 			highlightedString += string + '\n'
 		});
-		return highlightedString
+		return highlightedString + "<mark id='result'>Result: " + prettyPrintResult(get(resultStore)) + '</mark>'
 	}
 
 	function onTaskbarScroll(event) {
 		lineNumbers.scrollTop = event.srcElement.scrollTop
 		highlights.scrollTop = event.srcElement.scrollTop
+	}
+
+	function prettyPrintResult(result) {
+		if(result.number != undefined) {
+			return 'Number(' + result.number + ")"
+		}
+		if(result.bool != undefined) {
+			return 'Boolean(' + result.bool + ")"
+		}
+		if(result.values != undefined) {
+			return "[" + result.values.map((accumulator, currentValue, index) => {
+				return prettyPrintResult(accumulator) + (index < result.values.length ? "," : "")
+			}) + "]"
+		}
 	}
 </script>
 
@@ -155,9 +169,14 @@
 		opacity: 0;
 	}
 
-	:global(mark) {
+	:global(mark:not(#result)) {
 		background: #7976FF;
 		color: white;
 		border-radius: 3px;
+	}
+
+	:global(mark#result) {
+		background: transparent;
+		color: grey;
 	}
 </style>

@@ -5,7 +5,7 @@
 	import Taskbar from './components/Taskbar.svelte'
 	import StepInformation from './components/StepInformation.svelte'
 	import Contextview from './components/Contextview.svelte'
-	import { typecheckDataStore, typecheckDataStepStore, errorStore } from './stores.js'
+	import { typecheckDataStore, typecheckDataStepStore, errorStore, resultStore } from './stores.js'
 
 	let codeview
 
@@ -15,14 +15,17 @@
 			method: 'POST',
 			body: codeview.code
 		}).then(response => response.json()).then(data => {
-			console.log(data)
 			if(data.error !== undefined) {
 				errorStore.set(data.error)
+				typecheckDataStepStore.set(0)
+				typecheckDataStore.set(null)
 			}
 			else {
 				errorStore.set(null)
-				data.sort((a, b) => a.seq < b.seq ? 1 : -1) 
-				typecheckDataStore.set(data)
+				let typecheckData = data["typecheckData"]
+				typecheckData.sort((a, b) => a.seq < b.seq ? 1 : -1) 
+				resultStore.set(data['result'])
+				typecheckDataStore.set(typecheckData)
 				typecheckDataStepStore.set(0)
 			}
 		})
