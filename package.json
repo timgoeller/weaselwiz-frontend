@@ -59,7 +59,7 @@
     "@rollup/plugin-node-resolve": "^7.0.0",
     "@rollup/plugin-typescript": "^5.0.1",
     "concurrently": "^5.1.0",
-    "electron": "8.2.4",
+    "electron": "18.3.7",
     "postcss": "^7.0.32",
     "rollup": "^1.32.0",
     "rollup-plugin-livereload": "^1.0.0",
